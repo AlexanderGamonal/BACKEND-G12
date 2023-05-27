@@ -1,0 +1,6 @@
+flask db init                                > inicializamos las migraciones en nuestro proyecto
+flask db migrate -m "nombre de la migracion" > crearemos una nueva migracion con los cambios en los modelos
+flask db upgrade                             > ejecuta las migraciones faltantes en la base de datos
+flask db upgrade --sql                       > mostrara el sql de las migraciones
+flask db downgrade                           > ejecuta las migraciones que no queremos correr en la base de datos
+flask db downgrade --sql                     > nos mostrara el comando sql
