@@ -1,0 +1,11 @@
+django-admin startproject NOMBRE_PROYECTO [.] > sirve para crear un nuevo proyecto de django y el [.] sirve para indicar donde queremos que se cree ese proyecto
+
+python3.11 manage.py runserver > iniciara el servidor de django
+
+python3.11 manage.py showmigrations                         > mostrara todas las migraciones en nuestro proyecto y con [x] las que ya se ejecutaron en la bd
+
+python3.11 manage.py migrate                                > sirve para ejecutar las migraciones faltantes en nuestro proyecto
+
+python3.11 manage.py startapp NOMBRE_APP                    > crea una nueva aplicacion en el proyecto
+
+python3.11 manage.py makemigrations NOMBRE_APP -n "NOMBRE"  > crea la migracion de la aplicacion indicada
