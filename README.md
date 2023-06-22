@@ -1,8 +1,8 @@
-# Repositorio de CodiGO Backend 12
+# Repositorio de CodiGo Backend 12
 
 ### Este sera el archivo de documentacion de nuestro repositorio
 
-Toda la informacion que necesitas la podras encontrar aca, el repositorio se dividira en semanas, donde cada semana sera una rama.
+Toda la informacion que necesites la podras encontrar aca, el repositorio se dividira en semanas, donde cada semana sera una rama
 
 - Semana 01: <a href="https://google.com">LINK </a>
 - Semana 02: NO DISPONIBLE
