@@ -1,0 +1,3 @@
+rest framework: nos permite crear api al instante, con crud y seguridad por defecto.
+
+cors : el otro modulo que nos permite comunicarnos con otro backend.
