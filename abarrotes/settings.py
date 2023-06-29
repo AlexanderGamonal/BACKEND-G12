@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from os import environ
 from dotenv import load_dotenv
 from pathlib import Path
+from cloudinary import config
 
 load_dotenv()
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'gestion',
     'rest_framework',
     'drf_yasg',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -169,3 +171,10 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+config(
+    cloud_name=environ.get('CLOUDINARY_NAME'),
+    api_key=environ.get('CLOUDINARY_API_KEY'),
+    api_secret=environ.get('CLOUDINARY_API_SECRET'),
+    secure=True
+)

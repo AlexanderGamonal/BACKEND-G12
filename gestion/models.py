@@ -3,30 +3,32 @@ from django.db import models
 # AbstractBaseUser > me sirve para modificar mi auth_user en su totalidad
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.html import mark_safe
+from cloudinary.models import CloudinaryField
 
-class Imagen(models.Model):
-    nombre = models.ImageField()
+# class Imagen(models.Model):
+#     nombre = models.ImageField()
 
-    def __str__(self):
-        # sirve para indicar como se mostrar la instancia al moment de ser solicitada
-        return self.nombre
+#     def __str__(self):
+#         # sirve para indicar como se mostrar la instancia al moment de ser solicitada
+#         return self.nombre
     
-    def nombre_tag(self):
-        # return mark_safe('<img src="/imagenes/%s" width="150" height="150" />' % (self.ubicacion))
-        return mark_safe('<img src="/imagenes/{}" width="150" height="150" />'.format(self.nombre))
+#     def nombre_tag(self):
+#         # return mark_safe('<img src="/imagenes/%s" width="150" height="150" />' % (self.ubicacion))
+#         return mark_safe('<img src="/imagenes/{}" width="150" height="150" />'.format(self.nombre))
     
-    # sirve para indicar el nombre de este 'atributo'
-    nombre_tag.short_description = 'Figura de la imagen'
+#     # sirve para indicar el nombre de este 'atributo'
+#     nombre_tag.short_description = 'Figura de la imagen'
 
-    class Meta:
-        db_table = 'imagenes'
-        # sirve para indicar como sera el nombre pluralizado en el panel administrativo
-        verbose_name_plural = 'Imagenes'
+#     class Meta:
+#         db_table = 'imagenes'
+#         # sirve para indicar como sera el nombre pluralizado en el panel administrativo
+#         verbose_name_plural = 'Imagenes'
 
 
 class Categoria(models.Model):
     nombre = models.TextField(unique=True)
-    imagen = models.OneToOneField(to=Imagen, on_delete=models.RESTRICT, db_column='imagen_id', related_name='categoria')
+    # imagen = models.OneToOneField(to=Imagen, on_delete=models.RESTRICT, db_column='imagen_id', related_name='categoria')
+    imagen = CloudinaryField('categoria')
 
     class Meta:
         db_table = 'categorias'
@@ -37,7 +39,8 @@ class Producto(models.Model):
     lote = models.TextField(null=False)
     precio = models.FloatField(null=False)
     categoria = models.ForeignKey(to=Categoria, on_delete=models.CASCADE, db_column='categoria_id', related_name='productos')
-    imagen = models.OneToOneField(to=Imagen, on_delete=models.RESTRICT, db_column='imagen_id', related_name='producto')
+    # imagen = models.OneToOneField(to=Imagen, on_delete=models.RESTRICT, db_column='imagen_id', related_name='producto')
+    imagen = CloudinaryField('producto')
 
     class Meta:
         db_table = 'productos'

@@ -1,1 +1,4 @@
 entorno_*/
+venv/
+__pycache__
+.env
