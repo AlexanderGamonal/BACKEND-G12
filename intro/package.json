@@ -1,0 +1,8 @@
+{
+    "name": "prueba",
+    "version": "1.0.0",
+    "description": "Este es un proyecto de prueba",
+    "scripts": {
+        "saludar": "echo Hola mundo"
+    }
+}

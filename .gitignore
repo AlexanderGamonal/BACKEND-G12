@@ -1,0 +1,5 @@
+.env
+entorno_*/
+*.pyc
+
+node_modules/
