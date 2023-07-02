@@ -1,5 +1,6 @@
 entorno_*/
 venv/
-__pycache__
+__pycache__/
 .env
 mi_primera_*/
+*.pyc
