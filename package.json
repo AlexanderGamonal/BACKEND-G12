@@ -1,0 +1,28 @@
+{
+  "name": "store-api",
+  "version": "1.0.0",
+  "description": "API para el uso de una tienda con ruta protegida e imagenes",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e .env -- nodemon ./src/index.js",
+    "test": "node ./src/index.js"
+  },
+  "keywords": [
+    "express",
+    "aws",
+    "jwt"
+  ],
+  "author": "Alexander Gamonal",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.16.2",
+    "express": "^4.18.2",
+    "prisma": "^4.16.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "dotenv-cli": "^7.2.1",
+    "nodemon": "^2.0.22"
+  }
+}
