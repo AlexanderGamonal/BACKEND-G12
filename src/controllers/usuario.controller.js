@@ -1,36 +1,91 @@
-import { conexion } from "../base_de_datos.js";
-import { registroUsuarioDto } from "../dtos/usuario.dto.js";
-import bcrypt from "bcryptjs";
+import { conexion } from '../base_de_datos.js'
+import { registroUsuarioDto, loginDto } from '../dtos/usuario.dto.js'
+import bcrypt from 'bcryptjs'
+import { validarData } from '../utils/validador.js'
+import { Prisma } from '@prisma/client'
+import jwt from 'jsonwebtoken'
 
 export const registroUsuario = async (req, res) => {
-  const { body } = req;
-  const dataValidada = registroUsuarioDto.validate(body);
+    const { body } = req
+    const dataValidada = registroUsuarioDto.validate(body)
+    try {
+        const data = validarData({ error: dataValidada.error, data: dataValidada.value, message: 'Error al crear el usuario' })
 
-  if (dataValidada.error) {
-    return res.status(400).json({
-      message: "Error al crear el usuario",
-      content: dataValidada.error.details[0].message,
-    });
-  }
+        // genera un texto aleatorio que luego se combinara con mi password y creara el hash de la password
+        const salt = await bcrypt.genSalt()
 
-  // genera un texto aleatorio que luego se combinara con mi password y creara un hash del password.
-  const Salt = await bcrypt.genSalt();
+        // Generamos el hash de nuestra password para almacenarla en la bd
+        const password = await bcrypt.hash(data.password, salt)
 
-  // Generamos el hash del password para almacenarlo en la base de datos.
-  const password = await bcrypt.hash(dataValidada.value.password, Salt);
+        const usuarioCreado = await conexion.usuario.create({
+            data: { ...data, password }
+        })
 
-  try {
-    const usuarioCreado = await conexion.usuario.create({
-      data: { ...dataValidada.value, password },
-    });
+        res.status(201).json({
+            message: 'Usuario creado exitosamente',
+            content: usuarioCreado
+        })
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return res.status(500).json({
+                message: 'Error al crear el usuario',
+                content: 'El usuario ya existe'
+            })
+        }
+        // La clase Error es la clase maestra de todos los errores 
+        if (error instanceof Error) {
+            return res.status(400).json(JSON.parse(error.message))
+        }
 
-    res.status(201).json({
-      message: "Usuario creado exitosamente",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error al crear el usuario",
-      content: "El usuario ya existe",
-    });
-  }
-};
+    }
+}
+
+export const login = async (req, res) => {
+    const dataValidada = loginDto.validate(req.body)
+
+    try {
+        const data = validarData({ error: dataValidada.error, data: dataValidada.value, message: 'Error al hacer el login' })
+
+        const usuarioEncontrado = await conexion.usuario.findUniqueOrThrow({ where: { email: data.email } })
+
+        const resultado = await bcrypt.compare(data.password, usuarioEncontrado.password)
+
+        if (!resultado) {
+            return res.status(400).json({
+                message: 'Credenciales Invalidas'
+            })
+        }
+        // crea una nueva token
+        const token = jwt.sign(
+            { id: usuarioEncontrado.id, email: usuarioEncontrado.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' })
+
+        return res.json({
+            content: token
+        })
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return res.status(400).json({
+                message: "Usuario no existe",
+                content: null
+            })
+        }
+
+        return res.status(400).json(JSON.parse(error.message))
+    }
+}
+
+export const perfil = async (req, res) => {
+    try {
+        const usuarioEncontrado = await conexion.usuario.findUniqueOrThrow({ where: { id: req.user.id } })
+
+        return res.json({
+            content: usuarioEncontrado
+        })
+    } catch (error) {
+        return res.status(400).json({
+            message: 'Usuario no existe'
+        })
+    }
+}
